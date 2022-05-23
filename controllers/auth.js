@@ -106,6 +106,7 @@ const loginUsuario = async(req, res = express.response) => {
 
     const token = await generarJWT(usuario.id, usuario.name);
 
+    
     res.json({
       ok: true,
       msg: 'login',
@@ -113,6 +114,7 @@ const loginUsuario = async(req, res = express.response) => {
       name: usuario.name,
       token
     })
+    console.log('se ingreso con exito')
     
   } catch (error) {
     console.log(error)
