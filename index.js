@@ -20,6 +20,8 @@ app.use(express.json());
 // //? rutas de creacion grupoLugares/lugares/tipoDispositivos/dispositivos
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/products', require('./routes/products'));
+app.use('/api/clients', require('./routes/clients'));
+app.use('/api/balance', require('./routes/balance'));
 
 
 // //?Ruta para el auth

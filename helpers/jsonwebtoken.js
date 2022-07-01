@@ -15,7 +15,7 @@ const generarJWT = ( uid, name) => {
     // aca hacemos nuestra signature (nuestra firma), 
     // jwt.sign (mensaje, clave, expiracion)
     jwt.sign( payload, process.env.SECRET_JWT_SEED, {
-      expiresIn: '12h',
+      expiresIn: '1h',
 
     }, (err,token) => {
       if(err){

@@ -3,6 +3,7 @@ const { Product } = require('../models/products');
 
 
 const createNewProduct = async (req, res = express.response) => {
+  console.log(req.body)
 
   try {
     const newProduct =  new Product(req.body);
@@ -12,6 +13,7 @@ const createNewProduct = async (req, res = express.response) => {
     res.json({
       ok: true,
       msg: 'El producto de agrego se creo con exito',
+      newProduct
     })
 
   } catch (error) {
@@ -22,6 +24,8 @@ const createNewProduct = async (req, res = express.response) => {
     })
   }
 };
+
+
 
 const deleteProduct = async (req, res = express.response) => {
   const { id } = req.params;
@@ -46,25 +50,60 @@ const deleteProduct = async (req, res = express.response) => {
 };
 
 const updateProduct = async (req, res = express.response) => {
+
   const { id } = req.params;
-  const { body } = req;
+  const { price, profits, percentage, raw_material_price, dept } = req.body;
 
-  try {
-    const productUpdate = await Product.findByIdAndUpdate(id, body, { new: true });
+  console.log(price, profits, percentage, raw_material_price, dept)
 
-    res.json({
-      ok: true,
-      msg: 'El producto se actualizo con exito',
-      productUpdate
-    })
 
-  } catch (error) {
-    console.log(error)
-    res.json({
-      ok: false,
-      msg: 'Por favor hable con el adm',
-    })
+
+
+  if( price !== undefined ){
+
+    console.log('se Ingreso en la parte de UPDATE-PRODUCT-PRICE');
+      try {
+        const productUpdate = await Product.findByIdAndUpdate(id, {price, profits, percentage}, { new: true });
+
+        res.json({
+          ok: true,
+          msg: 'El producto se actualizo con exito',
+          productUpdate
+        })
+
+      } catch (error) {
+        console.log(error)
+        res.json({
+          ok: false,
+          msg: 'Por favor hable con el adm',
+        })
+      }
   }
+
+  if( raw_material_price !== undefined ){
+
+    console.log('se Ingreso en la parte de UPDATE-PRODUCT-RAW-MATERIAL-PRICE');
+    console.log(raw_material_price, profits, percentage)
+
+    try {
+      const productUpdate = await Product.findByIdAndUpdate(id, {raw_material_price, profits, percentage}, { new: true });
+
+      res.json({
+        ok: true,
+        msg: 'El producto se actualizo con exito',
+        productUpdate
+      });
+
+    } catch (error) {
+      console.log(error)
+      res.json({
+        ok: false,
+        msg: 'Por favor hable con el adm',
+      });
+    }
+  }
+
+
 };
 
 const getProduct = async (req, res = express.response) => {
@@ -95,7 +134,37 @@ const getProduct = async (req, res = express.response) => {
   }
 };
 
+const getAllProducts = async (req, res = express.response) => {
+
+  try {
+
+    const products = await Product.find();
+    
+    if(products.length > 0){
+      res.json({
+        ok: true,
+        msg: 'Los productos se encontraron con exito, anasheee',
+        products,
+        productsArray: products.products
+
+      })
+    }else{
+      res.json({
+        ok: false,
+        msg: 'No hay productos',
+      })
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({
+      ok: false,
+      msg: 'Por favor hable con el adm',
+    })
+  }
+
+};
 
 
 
-module.exports = { createNewProduct, deleteProduct, updateProduct, getProduct };
+
+module.exports = { createNewProduct, deleteProduct, updateProduct, getProduct, getAllProducts };

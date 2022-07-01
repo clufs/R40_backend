@@ -3,23 +3,38 @@ const {Schema, model} = require('mongoose');
 
 const ordersSchema = new Schema({
 
+  Client: {type: String},
   date: { type: Number , default: Date.now() },
-  status:{ type: String, default: 'pending'},
+  status:{ type: String, default: 'pending' },
   dateFinish:{ type: Number },
-  orderItems: [
+
+  period:{type: String, required: true},
+
+
+  orders: [
     {
-      _id:       { type: String },
       name:      { type: String },
-      size:      { type: Number },
-      quantity:  { type: Number },
+      color:     { type: String },
       price:     { type: Number },
+      profits:   { type: Number },
+      quantity:  { type: Number },
+      size:      { type: String },
+      subTotal:  { type: Number },
+      variant:   { type: String },
+      _id:       { type: String }
+
+      // status:    { type: String , default: 'Pending' },
     }
   ],
-  cantItems:    { type: Number },
-  totalPrice:   { type: Number },
-  totalProfits: { type: Number }
-
+  
+  TotalPrice:   { type: Number },
+  TotalProfits: { type: Number },
+  
+  dept: {type: Number, default: 0}
+  
 });
+
+
 
 
 
