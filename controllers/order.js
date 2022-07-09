@@ -1,46 +1,34 @@
-const express = require('express');
-const {
-  Order
-} = require('../models/orders');
-
+const express = require("express");
+const { Order } = require("../models/orders");
 
 const createNewOrder = async (req, res = express.response) => {
-
-  console.log(req.body)
+  console.log(req.body);
   try {
     const order = new Order(req.body);
-
 
     await order.save();
 
     res.json({
       ok: true,
-      msg: 'La orden se creo con exito',
-      order
-    })
+      msg: "La orden se creo con exito",
+      order,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.json({
       ok: false,
-      msg: 'Por favor hable con el adm',
-    })
+      msg: "Por favor hable con el adm",
+    });
   }
 };
 
 const updateStatusOrderItem = async (req, res = express.response) => {
-
-  const {
-    _id,
-    idOrderItem,
-    status
-  } = req.body;
-
-
+  const { _id, idOrderItem, status } = req.body;
 
   try {
     const order = await Order.findById(_id);
 
-    const orderItem = order.Order.find(e => e._id == idOrderItem)
+    const orderItem = order.Order.find((e) => e._id == idOrderItem);
 
     orderItem.status = status;
 
@@ -48,41 +36,32 @@ const updateStatusOrderItem = async (req, res = express.response) => {
 
     res.json({
       ok: true,
-      msg: 'El estado de la orden_item se actualizo con exito',
-      order
-    })
-
+      msg: "El estado de la orden_item se actualizo con exito",
+      order,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.json({
       ok: false,
-      msg: 'Por favor hable con el adm',
-    })
+      msg: "Por favor hable con el adm",
+    });
   }
-
-
 };
 
 const updateStatusOrder = async (req, res = express.response) => {
-
-  const {
-    _id,
-    status
-  } = req.body;
-
+  const { _id, status } = req.body;
 
   try {
-
     const order = await Order.findById(_id);
-    console.log(order)
+    console.log(order);
 
     if (!order) {
       res.json({
         ok: false,
-        msg: 'La orden no existe',
-      })
+        msg: "La orden no existe",
+      });
     } else {
-      console.log('ingreso a el else')
+      console.log("ingreso a el else");
       order.status = status;
     }
 
@@ -90,31 +69,22 @@ const updateStatusOrder = async (req, res = express.response) => {
 
     res.json({
       ok: true,
-      msg: 'El estado de la orden se actualizo con exito',
-      order
-    })
-
-
+      msg: "El estado de la orden se actualizo con exito",
+      order,
+    });
   } catch (error) {
     console.log(error);
     res.json({
       ok: false,
-      msg: 'Por favor hable con el adm',
-    })
+      msg: "Por favor hable con el adm",
+    });
   }
 };
 
-
-
-
 const updateOrder = async (req, res = express.response) => {
+  const { id, dept } = req.body;
 
-  const {
-    id,
-    dept
-  } = req.body
-
-  console.log(id, dept)
+  console.log(id, dept);
 
   try {
     const order = await Order.findById(id);
@@ -122,8 +92,8 @@ const updateOrder = async (req, res = express.response) => {
     if (!order) {
       res.json({
         ok: false,
-        msg: 'La orden no existe',
-      })
+        msg: "La orden no existe",
+      });
     } else {
       order.dept = dept;
 
@@ -131,60 +101,67 @@ const updateOrder = async (req, res = express.response) => {
 
       res.json({
         ok: true,
-        msg: 'La orden se actualizo con exito',
-        order
-      })
+        msg: "La orden se actualizo con exito",
+        order,
+      });
     }
-
-
   } catch (error) {
     console.log(error);
     res.json({
       ok: false,
-      msg: 'Por favor hable con el adm',
-    })
+      msg: "Por favor hable con el adm",
+    });
   }
-
-}
-
-
-
-
+};
 
 const getAllOrders = async (req, res) => {
-
   try {
-
     const orders = await Order.find();
 
     if (orders.length > 0) {
       res.json({
         ok: true,
-        msg: 'Ordenes encontradas',
-        orders
-      })
+        msg: "Ordenes encontradas",
+        orders,
+      });
     } else {
       res.json({
         ok: false,
-        msg: 'No hay ordenes',
-      })
+        msg: "No hay ordenes",
+      });
     }
   } catch (error) {
     console.log(error);
     res.json({
       ok: false,
-      msg: 'Por favor hable con el adm',
-    })
+      msg: "Por favor hable con el adm",
+    });
   }
+};
+
+const deleteOrder = async (req, res) => {
+  // console.log(req.body);
+  try {
+    const order = await Order.findByIdAndRemove(req.body._id);
+    if (!order) {
+      // console.log("algo salio mal", order);
+      res.status(400).json({ok: false});
+    }
 
 
 
-}
+    res.status(200).json({ok:true});
+    // console.log("se elimino correctamente", order);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
   createNewOrder,
   getAllOrders,
   updateStatusOrderItem,
   updateStatusOrder,
-  updateOrder
+  updateOrder,
+  deleteOrder,
 };
