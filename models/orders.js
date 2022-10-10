@@ -21,8 +21,8 @@ const ordersSchema = new Schema({
       size:      { type: String },
       subTotal:  { type: Number },
       variant:   { type: String },
-      _id:       { type: String }
-
+      _id:       { type: String },
+      statusOfStock: {type: String},
       // status:    { type: String , default: 'Pending' },
     }
   ],

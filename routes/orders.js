@@ -2,7 +2,7 @@
 
 const { Router } = require('express');
 
-const { deleteOrder,createNewOrder, getAllOrders, updateStatusOrder, updateOrder, updateStatusOrderItem } = require('../controllers/order');
+const { deleteOrder,createNewOrder, getAllOrders, updateStatusOrder, updateOrder, updateStatusOrderItem, getMonthValues } = require('../controllers/order');
 
 
 const router = Router();
@@ -15,6 +15,8 @@ router.post('/update-status-order_item', updateStatusOrderItem );
 router.post('/update-status-order', updateStatusOrder );
 
 router.post('/update-dept-order', updateOrder);
+
+router.get('/get-total-of-month', getMonthValues);
 
 router.get('/', getAllOrders);
 

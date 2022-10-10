@@ -157,6 +157,108 @@ const deleteOrder = async (req, res) => {
   }
 };
 
+
+const getMonthValues = async (req, res) => {
+
+  const period = _formatDay(new Date());
+  let total = [
+    
+  ];
+  
+  try {
+    const ordersOfMoth = await Order.find({period});
+    const order = ordersOfMoth.map(order => order.orders);
+
+    let profit_RemeraModal = 0;
+    let profit_RemeraAlgodon = 0;
+
+    let profit_gorras = 0;
+
+    let profit_Patentes = 0;
+    let profit_Calcos = 0;
+    let profit_parches = 0;
+
+
+    order.forEach( item => item.map(({profits, quantity, name}) => {
+      //Modal
+      if(name.includes('Modal')){
+        // console.log('si contiene Modal')
+        profit_RemeraModal = profit_RemeraModal + profits * quantity;
+      }
+
+      //Algodon
+      else if(name.includes('Algodón')) {
+        profit_RemeraAlgodon = profit_RemeraAlgodon + profits * quantity; 
+      }
+
+      //Gorras
+      else if(name.includes('Gorra')) {
+        profit_gorras = profit_gorras + profits * quantity; 
+      }
+
+
+      
+      //* Calcos
+      else if(name.includes('Stickers')) {
+        profit_Calcos = profit_Calcos + profits * quantity; 
+      }
+
+      //* Patentes
+      else if(name.includes('Patentes')) {
+        profit_Patentes = profit_Patentes + profits * quantity; 
+      }
+
+      //* Parches
+      else if(name.includes('Parche')) {
+        profit_parches = profit_parches + profits * quantity; 
+      }
+
+    })
+    );
+
+
+    res.json({
+      period,
+      
+      profit_RemeraModal,
+      profit_Patentes,
+      profit_Calcos,
+      profit_parches,
+      profit_gorras,
+      profit_RemeraAlgodon
+
+    })
+  } catch (error) {
+    console.log(error);
+  }
+
+
+
+
+  // const orders = await Order.find({period: })
+
+}
+
+const _formatDay = (inputDate) => {
+  let date, month, year;
+
+  date = inputDate.getDate();
+  month = inputDate.getMonth() + 1;
+  year = inputDate.getFullYear();
+
+    date = date
+        .toString()
+        .padStart(2, '0');
+
+    month = month
+        .toString()
+        .padStart(2, '0');
+
+  return `${month}/${year}`;
+}
+
+
+
 module.exports = {
   createNewOrder,
   getAllOrders,
@@ -164,4 +266,5 @@ module.exports = {
   updateStatusOrder,
   updateOrder,
   deleteOrder,
+  getMonthValues
 };
