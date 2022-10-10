@@ -176,6 +176,8 @@ const getMonthValues = async (req, res) => {
     let profit_Calcos = 0;
     let profit_parches = 0;
 
+    
+
     order.forEach((item) => {
       if (item != undefined) {
         item.map(({ profits, quantity, name }) => {
@@ -222,6 +224,8 @@ const getMonthValues = async (req, res) => {
       profit_parches,
       profit_gorras,
       profit_RemeraAlgodon,
+
+      total_profit: profit_RemeraModal + profit_Patentes + profit_Calcos + profit_parches + profit_gorras + profit_RemeraAlgodon
     });
   } catch (error) {
     console.log(error);
