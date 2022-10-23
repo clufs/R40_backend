@@ -170,7 +170,6 @@ const v2_getAllProducts = async( req, res = express.response) => {
       const a = productsToSend.filter(prod => prod.category === 'Otros' || prod.category === 'Gorra');
 
       res.json({
-        ok: true,
         products: a
       })
 
