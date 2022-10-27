@@ -1,4 +1,5 @@
 const express = require("express");
+const { setDateFormat } = require("../helpers/dateFunc");
 const { Order } = require("../models/orders");
 const { Product } = require("../models/products");
 
@@ -23,8 +24,8 @@ const createOrderMobile = async (req, res = express.response) => {
 
 
   const order = {
-    Client: 'El gato parrilla',
-    period: '10/2022',
+    Client: 'Venta directa',
+    period: setDateFormat(Date.now()),
     status: 'shiped',
     TotalPrice: totalPrice,
     TotalProfits: totalProfit,
