@@ -2,7 +2,7 @@
 
 const { Router } = require('express');
 
-const { deleteOrder,createNewOrder, getAllOrders, updateStatusOrder, updateOrder, updateStatusOrderItem, getMonthValues } = require('../controllers/order');
+const { deleteOrder,createNewOrder, getAllOrders, updateStatusOrder, updateOrder, updateStatusOrderItem, getMonthValues, createOrderMobile } = require('../controllers/order');
 
 
 const router = Router();
@@ -21,6 +21,8 @@ router.get('/get-total-of-month', getMonthValues);
 router.get('/', getAllOrders);
 
 router.post('/remove', deleteOrder);
+
+router.post('/createOrderMobile', createOrderMobile);
 
 
 

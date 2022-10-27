@@ -1,5 +1,60 @@
 const express = require("express");
 const { Order } = require("../models/orders");
+const { Product } = require("../models/products");
+
+const createOrderMobile = async (req, res = express.response) => {
+
+  console.log(req.body);
+  const products = await Product.find({});
+  console.log(products);
+
+  var totalPrice = 0;
+  var totalProfit = 0;
+
+  req.body.products.forEach(e => totalPrice = totalPrice + e.price * e.cant);
+  
+  req.body.products.forEach( prod =>  {
+    products.forEach( e => {
+      if( prod.name === e.name ){
+        totalProfit = totalProfit + e.profits * prod.cant
+      }
+    })
+  });
+
+
+  const order = {
+    Client: 'El gato parrilla',
+    period: '10/2022',
+    status: 'shiped',
+    TotalPrice: totalPrice,
+    TotalProfits: totalProfit,
+    orders: req.body.products.map(e => {
+      return{
+        name: e.name,
+        color: '-',
+        size: '-',
+        price: e.price,
+        quantity: e.cant,
+        subTotal: e.price * e.cant,
+        variant: '-',
+        _id: e.id,
+        statusOfStock: '-',
+      }
+    })
+  };
+
+  try {
+    const order1 = new Order(order);
+    await order1.save();
+    res.json({
+      order1
+    });
+    
+  } catch (error) {
+    console.log(error);
+  }
+
+}
 
 const createNewOrder = async (req, res = express.response) => {
   console.log(req.body);
@@ -254,6 +309,7 @@ module.exports = {
   updateStatusOrderItem,
   updateStatusOrder,
   updateOrder,
+  createOrderMobile,
   deleteOrder,
   getMonthValues,
 };
