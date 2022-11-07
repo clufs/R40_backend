@@ -4,58 +4,62 @@ const { Order } = require("../models/orders");
 const { Product } = require("../models/products");
 
 const createOrderMobile = async (req, res = express.response) => {
-
-  console.log(req.body);
+  console.log(req.body.products);
   const products = await Product.find({});
-  console.log(products);
+  // console.log(products);
 
   var totalPrice = 0;
   var totalProfit = 0;
 
-  req.body.products.forEach(e => totalPrice = totalPrice + e.price * e.cant);
-  
-  req.body.products.forEach( prod =>  {
-    products.forEach( e => {
-      if( prod.name === e.name ){
-        totalProfit = totalProfit + e.profits * prod.cant
-      }
-    })
-  });
+  try {
+    req.body.products.forEach(
+      (e) => (totalPrice = totalPrice + e.price * e.cant)
+    );
 
+    req.body.products.forEach((prod) => {
+      products.forEach((e) => {
+        if (prod.name === e.name) {
+          totalProfit = totalProfit + e.profits * prod.cant;
+        }
+      });
+    });
+
+    
+  } catch (error) {
+    console.log(error);
+  }
 
   const order = {
-    Client: 'Venta directa',
+    Client: "Venta en local",
     period: setDateFormat(Date.now()),
-    status: 'shiped',
+    status: "shiped",
     TotalPrice: totalPrice,
     TotalProfits: totalProfit,
-    orders: req.body.products.map(e => {
-      return{
+    orders: req.body.products.map((e) => {
+      return {
         name: e.name,
-        color: '-',
-        size: '-',
+        color: "-",
+        size: "-",
         price: e.price,
         quantity: e.cant,
         subTotal: e.price * e.cant,
-        variant: '-',
+        variant: "-",
         _id: e.id,
-        statusOfStock: '-',
-      }
-    })
+        statusOfStock: "-",
+      };
+    }),
   };
 
   try {
     const order1 = new Order(order);
     await order1.save();
     res.json({
-      order1
+      order1,
     });
-    
   } catch (error) {
     console.log(error);
   }
-
-}
+};
 
 const createNewOrder = async (req, res = express.response) => {
   console.log(req.body);
@@ -232,8 +236,6 @@ const getMonthValues = async (req, res) => {
     let profit_Calcos = 0;
     let profit_parches = 0;
 
-    
-
     order.forEach((item) => {
       if (item != undefined) {
         item.map(({ profits, quantity, name }) => {
@@ -273,7 +275,7 @@ const getMonthValues = async (req, res) => {
 
     res.json({
       period,
-      
+
       profit_RemeraModal,
       profit_Patentes,
       profit_Calcos,
@@ -281,7 +283,13 @@ const getMonthValues = async (req, res) => {
       profit_gorras,
       profit_RemeraAlgodon,
 
-      total_profit: profit_RemeraModal + profit_Patentes + profit_Calcos + profit_parches + profit_gorras + profit_RemeraAlgodon
+      total_profit:
+        profit_RemeraModal +
+        profit_Patentes +
+        profit_Calcos +
+        profit_parches +
+        profit_gorras +
+        profit_RemeraAlgodon,
     });
   } catch (error) {
     console.log(error);
