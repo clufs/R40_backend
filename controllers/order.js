@@ -6,7 +6,6 @@ const { Product } = require("../models/products");
 const createOrderMobile = async (req, res = express.response) => {
   console.log(req.body.products);
   const products = await Product.find({});
-  // console.log(products);
 
   var totalPrice = 0;
   var totalProfit = 0;
